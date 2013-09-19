@@ -173,7 +173,7 @@
         requestURL = [requestURL URLByAppendingQueryString:queryString];
         request = [NSURLRequest requestWithURL:requestURL cachePolicy:cachePolicy timeoutInterval:REQUEST_TIMEOUT];
     } else if ([method isEqualToString:@"POST"]) {
-        request = [[[NSMutableURLRequest alloc] initWithURL:requestURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:REQUEST_TIMEOUT] autorelease];
+        request = [[NSMutableURLRequest alloc] initWithURL:requestURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:REQUEST_TIMEOUT];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         [request setFormPostParameters:requestParams];
@@ -225,7 +225,7 @@
 }
 
 - (NSURL *)replaceParameters:(NSMutableDictionary *)parameters inURL:(NSURL *)url {
-    __block NSMutableString *urlString = [NSMutableString stringWithString:[url absoluteString]];
+    __weak NSMutableString *urlString = [NSMutableString stringWithString:[url absoluteString]];
     NSDictionary *allParameters = [NSDictionary dictionaryWithDictionary:parameters];
     [allParameters enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSString *keyToReplace = [@":" stringByAppendingString:key];
@@ -239,7 +239,7 @@
 }
 
 - (NSString *)queryStringFromParameters:(NSDictionary *)parameters {
-    __block NSMutableString *queryString = [NSMutableString stringWithString:@""];
+    __weak NSMutableString *queryString = [NSMutableString stringWithString:@""];
     if ([parameters count] > 0) {
         [parameters enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             NSString *queryParameter = [NSString stringWithFormat:@"%@=%@&", key, obj];

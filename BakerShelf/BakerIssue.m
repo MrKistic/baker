@@ -301,23 +301,5 @@
 #endif
 }
 
--(void)dealloc {
-    [ID release];
-    [title release];
-    [info release];
-    [date release];
-    [url release];
-    [path release];
-    [bakerBook release];
-    [coverPath release];
-    [coverURL release];
-
-    [notificationUnzipErrorName release];
-    [notificationDownloadErrorName release];
-    [notificationDownloadFinishedName release];
-    [notificationDownloadProgressingName release];
-
-    [super dealloc];
-}
 
 @end

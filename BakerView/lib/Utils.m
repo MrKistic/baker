@@ -93,7 +93,7 @@
     static NSDateFormatter *dateFormat = nil;
     if (dateFormat == nil) {
         dateFormat = [[NSDateFormatter alloc] init];
-        NSLocale *enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+        NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         [dateFormat setLocale:enUSPOSIXLocale];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         [dateFormat setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
@@ -108,7 +108,6 @@
                                           cancelButtonTitle:buttonTitle
                                           otherButtonTitles:nil];
     [alert show];
-    [alert release];
 }
 
 @end

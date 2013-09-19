@@ -41,7 +41,7 @@
     self = [super init];
 
     if (self) {
-        path = [JSONPath retain];
+        path = JSONPath;
         [self createFileIfMissing];
         [self load];
     }
@@ -95,10 +95,5 @@
     }
 }
 
-- (void)dealloc {
-    [path release];
-
-    [super dealloc];
-}
 
 @end
