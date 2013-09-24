@@ -234,7 +234,7 @@
         [self handleBookToBeProcessed];
     }
 }
-- (NSInteger)supportedInterfaceOrientations
+- (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }
@@ -438,8 +438,14 @@
     [loadingLabel setFont:[UIFont boldSystemFontOfSize:18]];
     loadingLabel.shadowOffset = CGSizeMake(0, -1);
 
-    loadingLabel.textColor = [UIColor whiteColor];
-    loadingLabel.backgroundColor = [UIColor clearColor];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+      // We need to blacken the spinner for iOS7
+      spinner.color = [UIColor blackColor];
+    } else {
+      // We need to whiten the text for < iOS7
+      loadingLabel.textColor = [UIColor whiteColor];
+      loadingLabel.backgroundColor = [UIColor clearColor];
+    }
     loadingLabel.textAlignment = NSTextAlignmentLeft;
     loadingLabel.text = NSLocalizedString(@"REFRESHING_TEXT", nil);
 
