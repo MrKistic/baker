@@ -57,6 +57,8 @@
 
 @property (copy, nonatomic) NSString *currentStatus;
 
+@property (strong, nonatomic) UIButton *padding;
+
 #pragma mark - Structs
 typedef struct {
     int cellPadding;

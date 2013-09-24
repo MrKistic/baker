@@ -36,6 +36,10 @@
     // Background color for issues cover (before downloading the actual cover)
     #define ISSUES_COVER_BACKGROUND_COLOR @"#ffffff"
 
+    // Color for container around issues in the shelf
+    #define ISSUES_PADDING_BACKGROUND_COLOR @"#000000"
+    #define ISSUES_PADDING_BACKGROUND_OPACITY .25 // 0 - 1
+
     // Title for issues in the shelf
     // #define ISSUES_TITLE_FONT @"Helvetica"
     // #define ISSUES_TITLE_FONT_SIZE 15
@@ -44,7 +48,7 @@
     // Info text for issues in the shelf
     // #define ISSUES_INFO_FONT @"Helvetica"
     // #define ISSUES_INFO_FONT_SIZE 15
-    #define ISSUES_INFO_COLOR @"#929292"
+    #define ISSUES_INFO_COLOR @"#ffffff"
 
     #define ISSUES_PRICE_COLOR @"#b72529"
 

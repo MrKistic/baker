@@ -59,6 +59,8 @@
 
 @synthesize currentStatus;
 
+@synthesize padding;
+
 #pragma mark - Init
 
 - (id)initWithBakerIssue:(BakerIssue *)bakerIssue
@@ -101,6 +103,13 @@
     }
 
     UI ui = [IssueViewController getIssueContentMeasures];
+
+    // SETUP PADDING CONTAINER AROUND ISSUE
+    self.padding = [UIButton buttonWithType:UIButtonTypeCustom];
+    padding.frame = CGRectMake(15, 15, cellSize.width-ui.cellPadding + 5, cellSize.height-ui.cellPadding + 5);
+    padding.backgroundColor = [UIColor colorWithHexString:ISSUES_PADDING_BACKGROUND_COLOR];
+    padding.layer.opacity = ISSUES_PADDING_BACKGROUND_OPACITY;
+    [self.view addSubview:padding];
 
     self.issueCover = [UIButton buttonWithType:UIButtonTypeCustom];
     issueCover.frame = CGRectMake(ui.cellPadding, ui.cellPadding, ui.thumbWidth, ui.thumbHeight);
@@ -279,17 +288,24 @@
 
     heightOffset = heightOffset + priceLabel.frame.size.height + 10;
 
+    CGSize cellSize = [IssueViewController getIssueCellSize];
+    int buttonOffset = cellSize.height - 60;
+
     // SETUP ACTION BUTTON
     NSString *status = [self.issue getStatus];
     if ([status isEqualToString:@"remote"] || [status isEqualToString:@"purchasable"] || [status isEqualToString:@"purchased"]) {
-        actionButton.frame = CGRectMake(ui.contentOffset, heightOffset, 110, 30);
+
+        actionButton.frame = CGRectMake(ui.contentOffset, buttonOffset, 110, 30);
+
     } else if ([status isEqualToString:@"downloaded"] || [status isEqualToString:@"bundled"]) {
-        actionButton.frame = CGRectMake(ui.contentOffset, heightOffset, 80, 30);
+
+        actionButton.frame = CGRectMake(ui.contentOffset, buttonOffset, 80, 30);
+
     }
     actionButton.titleLabel.font = actionFont;
 
     // SETUP ARCHIVE BUTTON
-    archiveButton.frame = CGRectMake(ui.contentOffset + 80 + 10, heightOffset, 80, 30);
+    archiveButton.frame = CGRectMake(ui.contentOffset + 80 + 10, buttonOffset, 80, 30);
     archiveButton.titleLabel.font = archiveFont;
 
     // SETUP DOWN/LOADING SPINNER AND LABEL
