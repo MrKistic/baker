@@ -330,10 +330,24 @@
 
 #ifdef BAKER_NEWSSTAND
 - (void)handleRefresh:(NSNotification *)notification {
+
+    // set Title
+    [self setRefreshSpinner];
+
+    // do the work
+    [self performSelector:@selector(doRefreshing) withObject:nil afterDelay:0.01];
+}
+
+- (void) doRefreshing
+{
+    NSLog(@"Started refreshing");
+
     [self setrefreshButtonEnabled:NO];
 
     [issuesManager refresh:^(BOOL status) {
-        if(status) {
+
+        if (status) {
+
             self.issues = issuesManager.issues;
 
             [shelfStatus load];
@@ -387,6 +401,8 @@
                 [self.issueViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     [(IssueViewController *)obj refreshContentWithCache:NO];
                 }];
+                NSLog(@"Finished refreshing");
+                [self performSelector:@selector(resetTitle) withObject:nil afterDelay:0.5];
                 [self setrefreshButtonEnabled:YES];
             }];
 
@@ -395,9 +411,49 @@
             [Utils showAlertWithTitle:NSLocalizedString(@"INTERNET_CONNECTION_UNAVAILABLE_TITLE", nil)
                               message:NSLocalizedString(@"INTERNET_CONNECTION_UNAVAILABLE_MESSAGE", nil)
                           buttonTitle:NSLocalizedString(@"INTERNET_CONNECTION_UNAVAILABLE_CLOSE", nil)];
+            NSLog(@"Finished refreshing");
+            [self performSelector:@selector(resetTitle) withObject:nil afterDelay:0.5];
             [self setrefreshButtonEnabled:YES];
         }
     }];
+}
+
+- (void) setRefreshSpinner
+{
+    // Setup title label and spinner
+    CGRect frame = CGRectMake(0, 0, 25, 25);
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:frame];
+    [spinner startAnimating];
+    [spinner sizeToFit];
+    spinner.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin |
+                                UIViewAutoresizingFlexibleRightMargin |
+                                UIViewAutoresizingFlexibleTopMargin |
+                                UIViewAutoresizingFlexibleBottomMargin);
+
+    // get label size
+    CGSize titleSize = [NSLocalizedString(@"REFRESHING_TEXT", nil) sizeWithFont:[UIFont boldSystemFontOfSize:18]];
+
+    UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 0, titleSize.width, titleSize.height)];
+
+    [loadingLabel setFont:[UIFont boldSystemFontOfSize:18]];
+    loadingLabel.shadowOffset = CGSizeMake(0, -1);
+
+    loadingLabel.textColor = [UIColor whiteColor];
+    loadingLabel.backgroundColor = [UIColor clearColor];
+    loadingLabel.textAlignment = NSTextAlignmentLeft;
+    loadingLabel.text = NSLocalizedString(@"REFRESHING_TEXT", nil);
+
+    UIView *iv = [[UIView alloc] initWithFrame:CGRectMake(0, 0, titleSize.width + 30, titleSize.height)];
+
+    [iv addSubview:spinner];
+    [iv addSubview:loadingLabel];
+    self.navigationItem.titleView = iv;
+}
+
+- (void) resetTitle
+{
+  self.navigationItem.titleView = nil;
+  self.navigationItem.title = NSLocalizedString(@"SHELF_NAVIGATION_TITLE", nil);
 }
 
 - (IssueViewController *)issueViewControllerWithID:(NSString *)ID {

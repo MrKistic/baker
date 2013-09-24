@@ -9,6 +9,9 @@
 // Info button
 "INFO_BUTTON_TEXT" = "Info";
 
+// Refreshing text
+"REFRESHING_TEXT" = "Reloading...";
+
 // Subscription button
 "SUBSCRIBE_BUTTON_TEXT" = "Subscribe";
 "SUBSCRIBE_BUTTON_DISABLED_TEXT" = "Subscribing...";
