@@ -56,7 +56,7 @@
 
     return self;
 }
-- (NSInteger)supportedInterfaceOrientations
+- (NSUInteger)supportedInterfaceOrientations
 {
     return [self.topViewController supportedInterfaceOrientations];
 }

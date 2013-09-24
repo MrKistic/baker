@@ -114,6 +114,7 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIWebView *currPage;
 @property int currentPageNumber;
+@property BOOL barsHidden;
 
 #pragma mark - INIT
 - (id)initWithBook:(BakerBook *)bakerBook;
@@ -181,6 +182,7 @@
 #pragma mark - BARS VISIBILITY
 - (CGRect)getNewNavigationFrame:(BOOL)hidden;
 - (void)toggleBars;
+- (void)showBars;
 - (void)showNavigationBar;
 - (void)hideBars:(NSNumber *)animated;
 - (void)handleBookProtocol:(NSURL *)url;
@@ -190,5 +192,8 @@
 
 #pragma mark - INDEX VIEW
 - (BOOL)isIndexView:(UIWebView *)webView;
+
+#pragma mark - CONTENT SIZE
+- (void)preferredContentSizeChanged:(NSNotification *)notification;
 
 @end
