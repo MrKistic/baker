@@ -248,7 +248,7 @@
 
     UI ui = [IssueViewController getIssueContentMeasures];
     int heightOffset = ui.cellPadding;
-    uint textLineheight = [@"The brown fox jumps over the lazy dog" sizeWithFont:infoFont constrainedToSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
+    uint textLineheight = [@"The quick brown fox jumps over the lazy dog" sizeWithFont:infoFont constrainedToSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].height;
 
     // SETUP COVER IMAGE
     [self.issue getCoverWithCache:cache andBlock:^(UIImage *image) {
@@ -265,11 +265,20 @@
     heightOffset = heightOffset + titleLabel.frame.size.height + 5;
 
     // SETUP INFO LABEL
-    infoLabel.font = infoFont;
-    infoLabel.frame = CGRectMake(ui.contentOffset, heightOffset, 170, 60);
-    infoLabel.numberOfLines = 3;
-    infoLabel.text = self.issue.info;
-    [infoLabel sizeToFit];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+      infoLabel.font = infoFont;
+      infoLabel.frame = CGRectMake(ui.contentOffset, heightOffset, 170, 60);
+      infoLabel.numberOfLines = 3;
+      infoLabel.text = self.issue.info;
+      [infoLabel sizeToFit];
+    } else {
+      CGSize infoSize = [self.issue.info sizeWithFont:infoFont constrainedToSize:CGSizeMake(170, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+      uint infoLines = MIN(4, infoSize.height / textLineheight);
+
+      infoLabel.frame = CGRectMake(ui.contentOffset, heightOffset, 170, textLineheight * infoLines);
+      infoLabel.numberOfLines = infoLines;
+      infoLabel.text = self.issue.info;
+    }
 
     heightOffset = heightOffset + infoLabel.frame.size.height + 5;
 
