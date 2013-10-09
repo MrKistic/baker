@@ -488,7 +488,7 @@
         // TODO: assuming it is supported by NewsstandKit, implement a "Cancel" operation
     } else if ([status isEqualToString:@"purchasable"]) {
     #ifdef BAKER_NEWSSTAND
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssuePurchase" object:self]; // -> Baker Analytics Event
+        // [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssuePurchase" object:self]; // -> Baker Analytics Event
         [self buy];
     #endif
     }

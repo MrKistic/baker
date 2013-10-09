@@ -681,7 +681,8 @@
     NSString *path = [NSString stringWithString:[pages objectAtIndex:currentPageNumber - 1]];
     if ([[NSFileManager defaultManager] fileExistsAtPath:path] && tapNumber != 0) {
 
-        // NSLog(@"[BakerView] Goto page -> %@", [[NSFileManager defaultManager] displayNameAtPath:path]);
+        NSLog(@"[BakerView] Goto page -> %@", [[NSFileManager defaultManager] displayNameAtPath:path]);
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerGotoPage" object:self]; // -> Baker Analytics Event
 
         if ([book.bakerRendering isEqualToString:@"three-cards"])
         {
@@ -964,8 +965,9 @@
      * It contains a fix to avoid an overlapping status bar.
      */
 
-    //NSLog(@"[BakerView] Loading a Modal WebView with URL: %@", url.absoluteString);
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerViewModalBrowser" object:self]; // -> Baker Analytics Event
+    NSLog(@"[BakerView] Loading a Modal WebView with URL: %@", url.absoluteString);
+    NSDictionary *info = [NSDictionary dictionaryWithObject:url forKey:@"url"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerViewModalBrowser" object:self userInfo:info]; // -> Baker Analytics Event
 
     myModalViewController = [[[ModalViewController alloc] initWithUrl:url] autorelease];
     myModalViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
@@ -1888,9 +1890,12 @@
 
 #pragma mark - MEMORY
 - (void)viewWillDisappear:(BOOL)animated {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssueClose" object:self]; // -> Baker Analytics Event
-    
     [self saveBookStatusWithScrollIndex];
+}
+- (void)willMoveToParentViewController:(UIViewController *)parent{
+    if (self.isViewLoaded) {    // this is also called when being loaded - we only trigger the event on unloading
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssueClose" object:self]; // -> Baker Analytics Event
+    }
 }
 - (void)saveBookStatusWithScrollIndex {
     if (currPage != nil) {

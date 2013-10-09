@@ -305,10 +305,15 @@
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:transaction forKey:@"transaction"];
     NSString *productId = transaction.payment.productIdentifier;
 
+    // NSLog(@"[PurchasesManager] Completed transaction: %@", productId);
+    NSDictionary *productInfo = [NSDictionary dictionaryWithObject:productId forKey:@"productId"];
+
     if ([productId isEqualToString:FREE_SUBSCRIPTION_PRODUCT_ID] || [AUTO_RENEWABLE_SUBSCRIPTION_PRODUCT_IDS containsObject:productId]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_subscription_purchased" object:self userInfo:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerSubscriptionPurchase" object:self userInfo:productInfo]; // -> Baker Analytics Event
     } else if ([self productFor:productId]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"notification_issue_purchased" object:self userInfo:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssuePurchase" object:self userInfo:productInfo]; // -> Baker Analytics Event
     } else {
         NSLog(@"ERROR: Completed transaction for %@, which is not a Product ID this app recognises", productId);
     }
