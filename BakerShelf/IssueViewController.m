@@ -476,6 +476,8 @@
 - (void)actionButtonPressed:(UIButton *)sender
 {
     NSString *status = [self.issue getStatus];
+    NSDictionary *productInfo = [NSDictionary dictionaryWithObject:self.issue.productID forKey:@"productId"];
+
     if ([status isEqualToString:@"remote"] || [status isEqualToString:@"purchased"]) {
     #ifdef BAKER_NEWSSTAND
         [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssueDownload" object:self]; // -> Baker Analytics Event
@@ -488,7 +490,7 @@
         // TODO: assuming it is supported by NewsstandKit, implement a "Cancel" operation
     } else if ([status isEqualToString:@"purchasable"]) {
     #ifdef BAKER_NEWSSTAND
-        // [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssuePurchase" object:self]; // -> Baker Analytics Event
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssuePurchaseButton" object:self userInfo:productInfo]; // -> Baker Analytics Event
         [self buy];
     #endif
     }

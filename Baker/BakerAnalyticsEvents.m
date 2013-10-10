@@ -80,8 +80,10 @@
                                @"BakerIssueOpen",
                                @"BakerIssueClose",
                                @"BakerIssuePurchase",
+                               @"BakerIssuePurchaseButton",
                                @"BakerIssueArchive",
                                @"BakerSubscriptionPurchase",
+                               @"BakerSubscriptionPurchaseButton",
                                @"BakerViewPage",
                                @"BakerGotoPage",
                                @"BakerViewIndexOpen",
@@ -168,9 +170,22 @@
                               value:nil]
       build]];
 
-    } else if ([[notification name] isEqualToString:@"BakerIssuePurchase"]) {
+    } else if ([[notification name] isEqualToString:@"BakerIssuePurchaseButton"]) {
 
       // Track here when an issue purchase is requested
+      NSDictionary *userInfo = [notification userInfo];
+      NSString *productId = [userInfo objectForKey:@"productId"];
+      NSLog(@"[Google Analytics] Issue Purchase Button %@", productId);
+      [tracker send:[
+        [GAIDictionaryBuilder createEventWithCategory:@"action"
+                              action:@"PurchaseIssueButton"
+                              label:productId
+                              value:nil]
+      build]];
+
+    } else if ([[notification name] isEqualToString:@"BakerIssuePurchase"]) {
+
+      // Track here when an issue purchase is completed
       NSDictionary *userInfo = [notification userInfo];
       NSString *productId = [userInfo objectForKey:@"productId"];
       NSLog(@"[Google Analytics] Issue Purchased %@", productId);
@@ -193,9 +208,22 @@
                               value:nil]
       build]];
 
-    } else if ([[notification name] isEqualToString:@"BakerSubscriptionPurchase"]) {
+    } else if ([[notification name] isEqualToString:@"BakerSubscriptionPurchaseButton"]) {
 
       // Track here when a subscription purchased is requested
+      NSDictionary *userInfo = [notification userInfo];
+      NSString *productId = [userInfo objectForKey:@"productId"];
+      NSLog(@"[Google Analytics] Subscription Button Pushed %@", productId);
+      [tracker send:[
+        [GAIDictionaryBuilder createEventWithCategory:@"action"
+                              action:@"PurchaseSubscriptionButton"
+                              label:productId
+                              value:nil]
+      build]];
+
+    } else if ([[notification name] isEqualToString:@"BakerSubscriptionPurchase"]) {
+
+      // Track here when a subscription purchased is completed
       NSDictionary *userInfo = [notification userInfo];
       NSString *productId = [userInfo objectForKey:@"productId"];
       NSLog(@"[Google Analytics] Subscription Purchased %@", productId);

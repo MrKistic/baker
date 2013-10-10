@@ -495,7 +495,8 @@
             NSLog(@"Action sheet: restore");
         } else {
             NSLog(@"Action sheet: %@", action);
-            // [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerSubscriptionPurchase" object:self]; // -> Baker Analytics Event
+            NSDictionary *info = [NSDictionary dictionaryWithObject:action forKey:@"productId"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerSubscriptionPurchaseButton" object:self userInfo:info]; // -> Baker Analytics Event
             [self setSubscribeButtonEnabled:NO];
             if (![purchasesManager purchase:action]){
                 [Utils showAlertWithTitle:NSLocalizedString(@"SUBSCRIPTION_FAILED_TITLE", nil)
